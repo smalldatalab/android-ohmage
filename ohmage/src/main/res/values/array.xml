@@ -29,7 +29,7 @@
     <array name="navigation_icons">
         <item>@drawable/ic_home_surveys</item>
         <!--<item>@drawable/ic_home_ohmlets</item>-->
-        <item>@drawable/ic_home_streams</item>
+        <!--<item>@drawable/ic_home_streams</item>-->
         <!--<item>@drawable/ic_home_surveys</item>-->
         <!--<item>@drawable/ic_home_history</item>-->
         <item>@drawable/clock</item>
