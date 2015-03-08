@@ -40,6 +40,7 @@ import com.google.android.gms.plus.model.people.Person;
 
 import org.apache.http.auth.AuthenticationException;
 import org.ohmage.app.MainActivity;
+import org.ohmage.app.Ohmage;
 import org.ohmage.app.OhmageService;
 import org.ohmage.app.OhmletActivity.OhmletFragment;
 import org.ohmage.app.R;
@@ -234,7 +235,7 @@ public class AuthenticatorActivity extends AuthenticatorFragmentActivity impleme
                 if (responseCode == RESULT_OK) {
                     String token = intent.getStringExtra("authtoken");
                     if (token != null) {
-                        useGoogleToken("fromApp_" + token, false);
+                        useGoogleToken(token, false);
                         return;
                     }
                 }
@@ -415,7 +416,8 @@ public class AuthenticatorActivity extends AuthenticatorFragmentActivity impleme
                             return;
                         }
 
-                        if (error.getResponse().getStatus() == 409) {
+                        if (!Ohmage.USE_DSU_DATAPOINTS_API && error.getResponse().getStatus() == 409) {
+                            // won't happen for OMH DSU
                             Person person =
                                     mPlusClientFragment.getClient().getCurrentPerson();
                             String fullName = null;
@@ -433,7 +435,8 @@ public class AuthenticatorActivity extends AuthenticatorFragmentActivity impleme
                         }
                     }
                 };
-        ohmageService.getAccessTokenWithCode(token, AuthUtil.OMH_CLIENT_ID, callback);
+        ohmageService.getAccessTokenWithGoogleAccessToken(AuthUtil.OMH_CLIENT_ID,
+                AuthUtil.OMH_CLIENT_SECRET, token, callback);
     }
 
     /**
@@ -648,7 +651,7 @@ public class AuthenticatorActivity extends AuthenticatorFragmentActivity impleme
 
         private String getGoogleAccessTokenBlocking(String accountName) {
             try {
-                return auth.googleAuthGetToken(accountName);
+                return auth.googleAuthGetAccessToken(accountName);
             } catch (GooglePlayServicesAvailabilityException playEx) {
                 GooglePlayServicesErrorDialogFragment fragment =
                         new GooglePlayServicesErrorDialogFragment();

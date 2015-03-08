@@ -23,7 +23,6 @@ import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -151,6 +150,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
                     if (googleAccount != null) {
                         try {
                             token = getTokenFromGoogle(googleAccount);
+                            Log.i(Authenticator.class.getSimpleName(), token.toString());
                         } catch (UserRecoverableAuthException e1) {
                             userRecoverableAuthException = e1;
                         }
@@ -205,8 +205,8 @@ public class Authenticator extends AbstractAccountAuthenticator {
         // We can check for a google account to automatically update the refresh token
 
         try {
-            String googleToken = authHelper.googleAuthGetToken(googleAccount);
-            return ohmageService.getAccessTokenWithCode(googleToken, AuthUtil.OMH_CLIENT_ID);
+            String googleToken = authHelper.googleAuthGetAccessToken(googleAccount);
+            return ohmageService.getAccessTokenWithGoogleAccessToken(AuthUtil.OMH_CLIENT_ID, AuthUtil.OMH_CLIENT_SECRET, googleToken);
 
         } catch (UserRecoverableAuthException userAuthEx) {
             throw userAuthEx;

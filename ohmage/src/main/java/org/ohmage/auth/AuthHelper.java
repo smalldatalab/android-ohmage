@@ -23,6 +23,7 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 
 import org.ohmage.app.MainActivity;
+import org.ohmage.auth.AuthUtil.Google;
 
 import java.io.IOException;
 
@@ -37,11 +38,18 @@ public class AuthHelper {
         mContext = context;
     }
 
-    public String googleAuthGetToken(String googleAccount) throws UserRecoverableAuthException,
+    public String googleAuthGetAuthCode(String googleAccount) throws UserRecoverableAuthException,
             IOException, GoogleAuthException {
         String code = GoogleAuthUtil.getToken(mContext, googleAccount, AuthUtil.Google.CODE_SCOPE, null);
         // clear it immediately to avoid stale code from being cached
         GoogleAuthUtil.clearToken(mContext, code);
         return "fromApp_" + code;
+    }
+    public String googleAuthGetAccessToken(String googleAccount) throws UserRecoverableAuthException,
+            IOException, GoogleAuthException {
+        String code = GoogleAuthUtil.getToken(mContext, googleAccount, Google.ACCESS_TOKEN_SCOPE, null);
+        // clear it immediately to avoid stale code from being cached
+        GoogleAuthUtil.clearToken(mContext, code);
+        return code;
     }
 }
