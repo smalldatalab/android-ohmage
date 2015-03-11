@@ -87,6 +87,8 @@ public class ImagePrompt extends MediaPrompt {
                 imgView.getLayoutParams().height = 300;
                 imgView.requestLayout();
                 imgView.setImageBitmap(bitmap);
+                Button launch = (Button) this.getView().findViewById(R.id.launch);
+                launch.setText("Unsatisfied? Take another one?");
             }
         }
 
