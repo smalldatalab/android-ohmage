@@ -38,6 +38,7 @@ public class AuthHelper {
         mContext = context;
     }
 
+    @Deprecated
     public String googleAuthGetAuthCode(String googleAccount) throws UserRecoverableAuthException,
             IOException, GoogleAuthException {
         String code = GoogleAuthUtil.getToken(mContext, googleAccount, AuthUtil.Google.CODE_SCOPE, null);
@@ -45,6 +46,7 @@ public class AuthHelper {
         GoogleAuthUtil.clearToken(mContext, code);
         return "fromApp_" + code;
     }
+
     public String googleAuthGetAccessToken(String googleAccount) throws UserRecoverableAuthException,
             IOException, GoogleAuthException {
         String code = GoogleAuthUtil.getToken(mContext, googleAccount, Google.ACCESS_TOKEN_SCOPE, null);

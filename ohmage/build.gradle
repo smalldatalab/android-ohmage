@@ -60,7 +60,7 @@ android {
         versionCode 33
         versionName '4.0.1'
 
-        applicationId 'io.smalldata.android.ohmage'
+        applicationId 'io.smalldatalab.android.ohmage'
 
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
     }

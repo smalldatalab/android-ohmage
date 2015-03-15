@@ -18,6 +18,9 @@ package org.ohmage.sync;
 
 import android.util.Log;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import org.ohmage.sync.ResponseTypedOutput.ResponseFiles;
 
 import java.io.File;
@@ -37,14 +40,28 @@ import retrofit.mime.TypedString;
  */
 public class DataPointTypedOutput implements TypedOutput {
     private final MultipartTypedOutput mMulitpartType;
-    private static final String sDataFormatter = "{\"header\":%s,\"body\":%s}";
+    private static final JsonObject acquisitionProvenance;
+    static {
+        acquisitionProvenance = new JsonObject();
+        acquisitionProvenance.addProperty("source_name", "Ohmage-Android-1.0");
+        acquisitionProvenance.addProperty("modality", "self-reported");
+
+    }
+
+    public DataPointTypedOutput(JsonObject header, JsonObject location, JsonObject data, ResponseFiles files) {
 
 
-    public DataPointTypedOutput(String data, String header, ResponseFiles files) {
-        Log.e(DataPointTypedOutput.class.getSimpleName(), String.format(sDataFormatter,  header, data));
+        data.add("sensed_location", location);
+
+        header.add("acquisition_provenance", acquisitionProvenance);
+
+        JsonObject datapoint = new JsonObject();
+        datapoint.add("header", header);
+        datapoint.add("body", data);
+
         mMulitpartType = new MultipartTypedOutput();
         mMulitpartType.addPart("data", new TypedByteArray("application/json",
-                String.format(sDataFormatter,  header, data).getBytes()));
+                datapoint.toString().getBytes()));
 
         for (String id : files.getIds()) {
             mMulitpartType.addPart("media",

@@ -142,18 +142,10 @@ public interface OhmageService {
             @Field("google_access_token") String googleAccessToken) throws AuthenticationException;
 
     @FormUrlEncoded
-    @POST("/google-signin") void getAccessTokenWithGoogleAccessToken(
+    @POST("/social-signin/google") void getAccessTokenWithGoogleAccessToken(
             @Field("client_id") String clientId,
             @Field("client_secret") String clientSecret,
-            @Field("google_access_token") String googleAccessToken, CancelableCallback<AccessToken> callback);
-
-    @Headers(AuthUtil.OMH_AUTH_HEADER)
-    @GET("/google-signin") AccessToken getAccessTokenWithCode(@Query("code") String code,
-            @Query("client_id") String clientId) throws AuthenticationException;
-
-    @Headers(AuthUtil.OMH_AUTH_HEADER)
-    @GET("/google-signin") void getAccessTokenWithCode(@Query("code") String code,
-            @Query("client_id") String clientId, CancelableCallback<AccessToken> callback);
+            @Field("access_token") String googleAccessToken, CancelableCallback<AccessToken> callback);
 
     @Headers(AuthUtil.OMH_AUTH_HEADER)
     @FormUrlEncoded

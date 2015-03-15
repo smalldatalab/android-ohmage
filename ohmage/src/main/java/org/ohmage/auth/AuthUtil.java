@@ -46,14 +46,14 @@ public class AuthUtil {
     private static final long SYNC_INTERVAL_IN_MINUTES = 60L;
     public static final long SYNC_INTERVAL = SYNC_INTERVAL_IN_MINUTES * SECONDS_PER_MINUTE;
 
-    public static final String OMH_CLIENT_ID = "org.openmhealth.android.ohmage";
-    public static final String OMH_CLIENT_SECRET = "5Eo43jkLD7z76c";
+    public static final String OMH_CLIENT_ID = "io.smalldatalab.android.ohmage";
+    public static final String OMH_CLIENT_SECRET = "xEUJgIdS2f12jmYomzEH";
     public static final String OMH_AUTH_HEADER = "Authorization: Basic b3JnLm9wZW5taGVhbHRoLmFuZHJvaWQub2htYWdlOjVFbzQzamtMRDd6NzZj";
 
     public static final class Google {
         public static final String[] SCOPES = {
                 "email",
-                "https://www.googleapis.com/auth/userinfo.profile"
+                "profile"
         };
 
         public static final String ACCESS_TOKEN_SCOPE = "oauth2:" + TextUtils.join(" ", SCOPES);

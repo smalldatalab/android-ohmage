@@ -255,15 +255,16 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private Observable<Response> uploadDatapoint(Cursor cursor, ResponseFiles files) throws AuthenticationException {
+
+        JsonObject metadata = (JsonObject) new JsonParser().parse(cursor.getString(4));
+        JsonObject body = (JsonObject) new JsonParser().parse(cursor.getString(3));
+
         OmhDataPointHeader header = new OmhDataPointHeader();
         header.schemaId = new SchemaId(cursor.getString(1), cursor.getString(2));
-
-
-        JsonObject metadata =  new JsonParser().parse(cursor.getString(4)).getAsJsonObject();
         header.creationDateTime = metadata.get("timestamp").getAsString();
         header.id = metadata.get("id").getAsString();
-        Log.e(TAG, cursor.getString(3) + gson.toJson(header) + files.getIds().toString());
-        DataPointTypedOutput point = new DataPointTypedOutput(cursor.getString(3), gson.toJson(header), files);
+        JsonObject location = metadata.get("location").getAsJsonObject();
+        DataPointTypedOutput point = new DataPointTypedOutput((JsonObject)gson.toJsonTree(header), location, body, files);
 
         // Make the call to upload responses
         return ohmageService.uploadDataPoint(point).cache();
