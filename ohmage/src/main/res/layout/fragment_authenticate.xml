@@ -37,6 +37,15 @@
             android:layout_weight="1"
             android:paddingTop="10dp" />
 
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_google_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:layout_above="@+id/sign_up_email_button"
+            android:layout_centerHorizontal="true" />
+
         <LinearLayout
             android:id="@+id/authenticate_buttons"
             android:layout_width="match_parent"
@@ -48,13 +57,6 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
             android:background="@drawable/splash_gradient_bottom">
-
-            <com.google.android.gms.common.SignInButton
-                android:id="@+id/sign_in_google_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/sign_up_email_button"
-                android:layout_centerHorizontal="true" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,7 +71,8 @@
                     android:textStyle="bold"
                     android:textColor="@color/common_signin_btn_text_light"
                     android:text="@string/sign_in_with_email"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/create_account_button"
@@ -80,7 +83,8 @@
                     android:text="@string/sign_up_with_ohmage"
                     android:textStyle="bold"
                     android:textColor="@color/common_signin_btn_text_light"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:visibility="gone"/>
             </LinearLayout>
 
         </LinearLayout>
