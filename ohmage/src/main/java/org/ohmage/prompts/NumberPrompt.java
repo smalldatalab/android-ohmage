@@ -16,11 +16,13 @@
 
 package org.ohmage.prompts;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import org.ohmage.app.R;
@@ -53,10 +55,16 @@ public class NumberPrompt extends AnswerablePrompt<BigDecimal> {
             return fragment;
         }
 
+        public void hideSoftKeyboard() {
+            InputMethodManager
+                    inputMethodManager = (InputMethodManager)  this.getActivity().getSystemService(
+                    Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(this.getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
         @Override
         public void onCreatePromptView(LayoutInflater inflater, final ViewGroup container,
                 Bundle savedInstanceState) {
-            ViewGroup view = (ViewGroup) inflater.inflate(R.layout.prompt_number, container, true);
+            final ViewGroup view = (ViewGroup) inflater.inflate(R.layout.prompt_number, container, true);
 
             numberPicker = (NumberPicker) view.findViewById(R.id.number_picker);
             numberPicker.requestFocus();
@@ -76,15 +84,18 @@ public class NumberPrompt extends AnswerablePrompt<BigDecimal> {
                     if (id == R.id.submit_prompt || id == EditorInfo.IME_NULL) {
                         if (getPrompt().hasValidResponse()) {
                             dispatchOkPressed();
+                            hideSoftKeyboard();
                             return true;
                         } else if (getPrompt().isSkippable()) {
                             dispatchSkipPressed();
+                            hideSoftKeyboard();
                             return true;
                         }
                     }
                     return false;
                 }
             });
+
         }
 
         @Override protected void onSkipPressed() {
