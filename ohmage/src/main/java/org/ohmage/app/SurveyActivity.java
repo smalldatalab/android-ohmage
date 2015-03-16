@@ -251,6 +251,10 @@ public class SurveyActivity extends InjectedActionBarActivity
         setPromptFragmentAdapter();
     }
 
+    /*
+     * Submit the survey. First tell reminders that the survey was taken, then insert the response
+     * to the content provider, and finally show the Toast and return to the previous activity
+     */
     public void submit() {
         // Tell reminders that the survey was taken
         TriggerFramework.notifySurveyTaken(this, Surveys.getId(getIntent().getData()));
@@ -265,6 +269,7 @@ public class SurveyActivity extends InjectedActionBarActivity
         );
         mPagerAdapter.buildResponse(values);
         getContentResolver().insert(Responses.CONTENT_URI, values);
+        Toast.makeText(this, "The response has been submitted. Thank you!", Toast.LENGTH_SHORT).show();
         finish();
     }
 
