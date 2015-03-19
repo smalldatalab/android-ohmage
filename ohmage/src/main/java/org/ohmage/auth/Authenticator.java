@@ -52,6 +52,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     @Inject OhmageService ohmageService;
     @Inject AuthHelper authHelper;
 
+
     /**
      * This is the google email of an account that can be used for authentication
      */
@@ -67,6 +68,9 @@ public class Authenticator extends AbstractAccountAuthenticator {
      * The user id for the account as provided by the server.
      */
     public static final String USER_ID = "user_id";
+
+
+    private static final String TAG = Authenticator.class.getSimpleName();
 
     // Authentication Service context
     private final Context mContext;
@@ -117,12 +121,12 @@ public class Authenticator extends AbstractAccountAuthenticator {
         // Lets give another try to authenticate the user
         AccessToken token = null;
         UserRecoverableAuthException userRecoverableAuthException = null;
-        Log.e(Authenticator.class.getSimpleName(), "Get Auth token " + authToken + " Refresh " + am.getPassword(account));
+
         if (TextUtils.isEmpty(authToken)) {
             final String refreshToken = am.getPassword(account);
-
+            Log.i(TAG, "Auth token is null");
             if (refreshToken != null) {
-
+                Log.i(TAG, "Refresh Token");
                 try {
                     // If the account credentials have not gone to the server yet we saved the
                     // password for the user
@@ -136,6 +140,8 @@ public class Authenticator extends AbstractAccountAuthenticator {
                     } else {
                         // refresh token
                         if(Ohmage.USE_DSU_DATAPOINTS_API) {
+
+                            Log.i(TAG, "Refresh Token with DSU");
                             token = ohmageService.refreshAccessToken(refreshToken, "refresh_token");
                         }else {
                             token = ohmageService.getAccessToken(refreshToken);
@@ -150,7 +156,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
                     if (googleAccount != null) {
                         try {
                             token = getTokenFromGoogle(googleAccount);
-                            Log.i(Authenticator.class.getSimpleName(), token.toString());
+                            Log.i(TAG, token.toString());
                         } catch (UserRecoverableAuthException e1) {
                             userRecoverableAuthException = e1;
                         }
@@ -168,7 +174,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
                         throw new NetworkErrorException();
                     }
                 } catch(Exception e){
-                    Log.e(Authenticator.class.getSimpleName(), "", e);
+                    Log.e(TAG, "", e);
                 }
             }
         }
