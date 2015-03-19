@@ -49,9 +49,12 @@ public class AuthUtil {
 
     public static final String OMH_CLIENT_ID = "io.smalldatalab.android.ohmage";
     public static final String OMH_CLIENT_SECRET = "xEUJgIdS2f12jmYomzEH";
-    public  static final String BASED_64_BASIC_AUTH = Base64.encodeToString((OMH_CLIENT_ID + ":" + OMH_CLIENT_SECRET).getBytes(), Base64.DEFAULT);
-    public static final String OMH_AUTH_HEADER = "Authorization: Basic " + BASED_64_BASIC_AUTH;
+    public static final String OMH_AUTH_HEADER = "Authorization: Basic aW8uc21hbGxkYXRhbGFiLmFuZHJvaWQub2htYWdlOnhFVUpnSWRTMmYxMmptWW9tekVI";
 
+    static {
+        assert OMH_AUTH_HEADER.equals("Authorization: Basic " +
+                                      Base64.encodeToString((OMH_CLIENT_ID + ":" + OMH_CLIENT_SECRET).getBytes(), Base64.DEFAULT));
+    }
     public static final class Google {
         public static final String[] SCOPES = {
                 "email",
