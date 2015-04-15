@@ -152,6 +152,9 @@ public interface OhmageService {
     @POST("/oauth/token") AccessToken refreshAccessToken(@Field("refresh_token") String refreshToken, @Field("grant_type") String type)
             throws AuthenticationException;
 
+    @GET("/surveys")
+    List<Survey> blockingGetDefaultSurveys();
+
     @POST("/dataPoints")
     Observable<Response> uploadDataPoint(@Body DataPointTypedOutput data)
             throws AuthenticationException;

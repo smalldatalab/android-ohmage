@@ -85,19 +85,7 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-<!--
-        <service
-            android:name="org.ohmage.sync.StreamSyncService"
-            android:exported="true"
-            android:process=":sync">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter_streams" />
-        </service>
--->
+
         <service
             android:name="org.ohmage.sync.ResponseSyncService"
             android:exported="true"
@@ -131,13 +119,7 @@
             </intent-filter>
         </service>
 
-        <!--<provider
-            android:name="org.ohmage.provider.StreamContentProvider"
-            android:label="@string/streams"
-            android:authorities="org.ohmage.streams"
-            android:exported="true"
-            android:syncable="true" />
--->
+
         <provider
             android:name="org.ohmage.provider.ResponseContentProvider"
             android:label="@string/responses"

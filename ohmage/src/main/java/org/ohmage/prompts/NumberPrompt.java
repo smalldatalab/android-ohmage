@@ -40,8 +40,10 @@ public class NumberPrompt extends AnswerablePrompt<BigDecimal> {
     public BigDecimal max;
     public boolean wholeNumbersOnly;
 
+
     @Override
     public SurveyItemFragment getFragment() {
+
         return NumberPromptFragment.getInstance(this);
     }
 
@@ -50,6 +52,7 @@ public class NumberPrompt extends AnswerablePrompt<BigDecimal> {
         private NumberPicker numberPicker;
 
         public static NumberPromptFragment getInstance(NumberPrompt prompt) {
+
             NumberPromptFragment fragment = new NumberPromptFragment();
             fragment.setPrompt(prompt);
             return fragment;
