@@ -23,11 +23,13 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.ohmage.app.R;
 
@@ -50,6 +52,7 @@ public class ImagePrompt extends MediaPrompt {
 
         private static final int REQUEST_CODE = 0;
         private File mFile;
+        private boolean photoTaken = false;
 
         public static ImagePromptFragment getInstance(ImagePrompt prompt) {
             ImagePromptFragment fragment = new ImagePromptFragment();
@@ -87,15 +90,32 @@ public class ImagePrompt extends MediaPrompt {
                 imgView.getLayoutParams().height = 300;
                 imgView.requestLayout();
                 imgView.setImageBitmap(bitmap);
-                Button launch = (Button) this.getView().findViewById(R.id.launch);
-                launch.setText("Unsatisfied? Take another one?");
+
+                // Hide other view items other than image
+                ((TextView) this.getView().findViewById(R.id.text)).setVisibility(View.GONE);
+                ((Button) this.getView().findViewById(R.id.launch)).setVisibility(View.GONE);
+
+                // Change the skip button to a retake button
+                Button skipButton = (Button) this.getView().findViewById(R.id.skip);
+                skipButton.setText("Retake Photo");
+                skipButton.setVisibility(View.VISIBLE);
+
+                photoTaken = true;
             }
         }
 
         @Override protected void onSkipPressed() {
-            super.onSkipPressed();
-            if(mFile != null) {
-                mFile.delete();
+            if(!photoTaken){
+                super.onSkipPressed();
+                if(mFile != null) {
+                    mFile.delete();
+                }
+                ((Button) this.getView().findViewById(R.id.launch)).setVisibility(View.GONE);
+            } else {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                mFile = MediaPrompt.getTemporaryResponseFile();
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mFile));
+                startActivityForResult(intent, REQUEST_CODE);
             }
         }
     }
