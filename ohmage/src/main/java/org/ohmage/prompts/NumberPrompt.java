@@ -79,6 +79,9 @@ public class NumberPrompt extends AnswerablePrompt<BigDecimal> {
             }
             if(getPrompt().defaultResponse != null){
                 numberPicker.setValue(getPrompt().defaultResponse.intValue());
+                setValue(getPrompt().defaultResponse.intValue());
+            } else {
+                setValue(numberPicker.getValue());
             }
 
             numberPicker.setOnValueChangedListener(new OnValueChangeListener() {
