@@ -164,4 +164,7 @@ public class SurveyItemFragment extends Fragment {
         if(mButtons != null)
             mButtons.setVisibility(visibility);
     }
+    public void resetAnswerState(){
+        mAnswered = false;
+    }
 }

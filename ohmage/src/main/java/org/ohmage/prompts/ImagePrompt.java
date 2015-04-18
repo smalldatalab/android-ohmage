@@ -91,8 +91,10 @@ public class ImagePrompt extends MediaPrompt {
                 imgView.requestLayout();
                 imgView.setImageBitmap(bitmap);
 
-                // Hide other view items other than image
-                ((TextView) this.getView().findViewById(R.id.text)).setVisibility(View.GONE);
+                // Jared: Hide other view items other than image
+                // ANDY: I choose to keep the text view so the participant can recall what is
+                // the image for when retake
+               // ((TextView) this.getView().findViewById(R.id.text)).setVisibility(View.GONE);
                 ((Button) this.getView().findViewById(R.id.launch)).setVisibility(View.GONE);
 
                 // Change the skip button to a retake button
@@ -112,6 +114,9 @@ public class ImagePrompt extends MediaPrompt {
                 }
                 ((Button) this.getView().findViewById(R.id.launch)).setVisibility(View.GONE);
             } else {
+                // to prevent the activity from moving to the next prompt after retake
+                resetAnswerState();
+
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 mFile = MediaPrompt.getTemporaryResponseFile();
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mFile));
