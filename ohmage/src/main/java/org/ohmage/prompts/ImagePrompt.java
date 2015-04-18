@@ -102,6 +102,9 @@ public class ImagePrompt extends MediaPrompt {
                 skipButton.setText("Retake Photo");
                 skipButton.setVisibility(View.VISIBLE);
 
+
+                Button okButton = (Button) this.getView().findViewById(R.id.ok);
+                okButton.setText("Submit Photo");
                 photoTaken = true;
             }
         }
