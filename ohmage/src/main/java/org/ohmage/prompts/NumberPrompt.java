@@ -58,6 +58,14 @@ public class NumberPrompt extends AnswerablePrompt<BigDecimal> {
             return fragment;
         }
 
+        /**
+         * Ensure the value is converted to BigDecimal before set it
+         * (the super.setValue does not check this)
+         * @param val
+         */
+        private void setValue(int val){
+            super.setValue(new BigDecimal(val));
+        }
         public void hideSoftKeyboard() {
             InputMethodManager
                     inputMethodManager = (InputMethodManager)  this.getActivity().getSystemService(
@@ -77,11 +85,20 @@ public class NumberPrompt extends AnswerablePrompt<BigDecimal> {
             if(getPrompt().min != null){
                 numberPicker.setMinValue(getPrompt().min.intValue());
             }
-            if(getPrompt().defaultResponse != null){
-                numberPicker.setValue(getPrompt().defaultResponse.intValue());
-                setValue(getPrompt().defaultResponse.intValue());
-            } else {
-                setValue(numberPicker.getValue());
+
+            if(!isAnswered()) {
+                // IMPORTANT, don't setValue again if this prompt has been answered. Otherwise,
+                // if this method (onCreatePromptView) is called due to a notifyDatasetChanged(),
+                // the setValue() will trigger another (recursive) notifyDatasetChanged() and the
+                // app crashes.
+                if (getPrompt().defaultResponse != null) {
+                    numberPicker.setValue(getPrompt().defaultResponse.intValue());
+                    setValue(getPrompt().defaultResponse.intValue());
+                } else {
+                    setValue(numberPicker.getValue());
+                }
+            }else if (getPrompt().value != null){
+                numberPicker.setValue(getPrompt().value.intValue());
             }
 
             numberPicker.setOnValueChangedListener(new OnValueChangeListener() {
