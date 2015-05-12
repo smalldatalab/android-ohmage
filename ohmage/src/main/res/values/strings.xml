@@ -49,6 +49,7 @@
     <string name="error_field_required">This field is required</string>
     <string name="account_creation_progress">Creating Account…</string>
     <string name="sign_in_with_email">Sign in with E\u2011mail</string>
+    <string name="edit_url">(Edit server address)</string>
     <string name="sign_up_with_ohmage">Create Account</string>
     <string name="sign_in_with_twitter">Sign in with Twitter</string>
     <string name="unknown_error">Unknown error. Please try again later. Send feedback to us if this continues to happen.</string>

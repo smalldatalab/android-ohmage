@@ -46,6 +46,18 @@
             android:layout_above="@+id/sign_up_email_button"
             android:layout_centerHorizontal="true" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:id="@+id/edit_dsu_url"
+            android:text="@string/edit_url"
+            android:textColor="#d3d3d3"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"/>
+
         <LinearLayout
             android:id="@+id/authenticate_buttons"
             android:layout_width="match_parent"

@@ -20,15 +20,22 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.common.SignInButton;
 
+import org.ohmage.app.Ohmage;
 import org.ohmage.app.R;
 import org.ohmage.fragments.TransitionFragment;
 
@@ -52,6 +59,7 @@ public class AuthenticateFragment extends TransitionFragment implements View.OnC
      * The view which shows the authentication buttons
      */
     private View mAuthButtonsView;
+    private TextView editDsuUrl;
 
     private Callbacks mCallbacks;
 
@@ -67,6 +75,37 @@ public class AuthenticateFragment extends TransitionFragment implements View.OnC
         SignInButton signInButton = (SignInButton) view.findViewById(R.id.sign_in_google_button);
         signInButton.setOnClickListener(this);
         signInButton.setSize(SignInButton.SIZE_WIDE);
+
+        // Allow user the change the DSU URL
+        editDsuUrl = (TextView) view.findViewById(R.id.edit_dsu_url);
+        editDsuUrl.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Server Address");
+
+                // Set up the input
+                final EditText input = new EditText(getActivity());
+                input.setText(Ohmage.getUrl(getActivity()));
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                // Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Ohmage.setUrl(getActivity(), input.getText().toString());
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
+            }
+        });
 
         Button createAccount = (Button) view.findViewById(R.id.create_account_button);
         createAccount.setOnClickListener(this);

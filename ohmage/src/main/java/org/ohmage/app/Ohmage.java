@@ -17,6 +17,9 @@
 package org.ohmage.app;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import org.ohmage.dagger.AndroidModule;
 import org.ohmage.dagger.OhmageModule;
@@ -36,13 +39,37 @@ public class Ohmage extends Application {
     /**
      * The protocol and hostname used to access the ohmage service.
      */
-    public static final String API_HOST = "https://ohmage-omh.smalldata.io";
+    private static final String API_HOST = "https://ohmage-omh.smalldata.io";
 
     /**
      * The URL root used to access the ohmage API.
      */
-    public static final String API_ROOT = API_HOST + "/dsu";
+    private static final String API_ROOT = API_HOST + "/dsu";
 
+    /**
+     * The key of the preference used to store the DSU URL
+     */
+    private final static String PREFERENCE_DSU_URL = "preference_dsu_url";
+
+    /**
+     * Get the current URL to use for the ohmage service
+     * @param context
+     * @return
+     */
+    public static String getUrl(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(PREFERENCE_DSU_URL, API_ROOT);
+    }
+
+    /**
+     * Set the URL to use for the ohmage service
+     * @param context
+     * @param url
+     */
+    public static void setUrl(Context context, String url){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putString(PREFERENCE_DSU_URL, url).commit();
+    }
     /**
      * Configure to use the datapoints api rather than uploading points for ohmage 3.0
      */
