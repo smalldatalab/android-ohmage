@@ -104,7 +104,7 @@ public class ImagePrompt extends MediaPrompt {
 
 
                 Button okButton = (Button) this.getView().findViewById(R.id.ok);
-                okButton.setText("Submit Photo");
+                okButton.setText("Ok");
                 photoTaken = true;
             }
         }
