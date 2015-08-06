@@ -263,7 +263,7 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
         header.schemaId = new SchemaId(cursor.getString(1), cursor.getString(2));
         header.creationDateTime = metadata.get("timestamp").getAsString();
         header.id = metadata.get("id").getAsString();
-        JsonObject location = metadata.get("location").getAsJsonObject();
+        JsonObject location = metadata.get("location") == null ? null : metadata.get("location").getAsJsonObject();
         DataPointTypedOutput point = new DataPointTypedOutput((JsonObject)gson.toJsonTree(header), location, body, files);
 
         // Make the call to upload responses
