@@ -215,7 +215,7 @@ public class OhmageModule {
                 })
                 .setLogLevel(LogLevel.FULL)
                 .setErrorHandler(new OhmageErrorHandler())
-                .setServer(Ohmage.API_ROOT)
+                .setServer(Ohmage.getUrl(Ohmage.app()))
                 .setRequestInterceptor(requestInterceptor)
                 .build();
 
