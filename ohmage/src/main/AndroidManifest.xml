@@ -195,6 +195,14 @@
             android:name="org.ohmage.app.InstallSurveyDependencies"
             android:label="@string/install_dependencies_title" >
         </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.analytics.globalConfigResource"
+            android:resource="@xml/analytics_global_tracker" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="cfb3a98b37974d4549fcae970f87126aacd047d5" />
     </application>
 
 </manifest>

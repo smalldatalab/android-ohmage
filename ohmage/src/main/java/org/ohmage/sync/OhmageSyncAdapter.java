@@ -39,6 +39,7 @@ import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 
 import org.apache.http.auth.AuthenticationException;
@@ -224,9 +225,11 @@ public class OhmageSyncAdapter extends AbstractThreadedSyncAdapter {
                                     }
                                 } catch (AuthenticationException e) {
                                     Log.e(TAG, "Error authenticating user", e);
+                                    Crashlytics.logException(e);
                                     mSyncResult.stats.numAuthExceptions++;
                                 } catch (RetrofitError e) {
                                     Log.e(TAG, "Error synchronizing ohmlet member state", e);
+                                    Crashlytics.logException(e);
                                     mSyncResult.stats.numIoExceptions++;
                                 }
                                 return true;
@@ -322,6 +325,7 @@ public class OhmageSyncAdapter extends AbstractThreadedSyncAdapter {
                     }
 
                     @Override public void onError(Throwable e) {
+                        Crashlytics.logException(e);
                         showInstallSurveyApkNotification(surveys);
                     }
 
@@ -358,6 +362,7 @@ public class OhmageSyncAdapter extends AbstractThreadedSyncAdapter {
                     }
 
                     @Override public void onError(Throwable e) {
+                        Crashlytics.logException(e);
                         showInstallStreamApkNotification(streams);
                     }
 

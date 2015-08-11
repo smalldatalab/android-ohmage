@@ -435,12 +435,12 @@ public class AuthenticatorActivityTest
 
         onView(withId(R.id.sign_in_google_button)).perform(click());
 
-        verify(fakeAuthHelper).googleAuthGetToken(fakeGoogleEmail);
+        verify(fakeAuthHelper).googleAuthGetAuthCode(fakeGoogleEmail);
     }
 
     public void testGoogleAuthToken_receivedSuccessfully_triesToAuthWithOhmage() throws Throwable {
         setPlusClientFragmentSuccessfullyConnects();
-        when(fakeAuthHelper.googleAuthGetToken(fakeGoogleEmail)).thenReturn(fakeGoogleToken);
+        when(fakeAuthHelper.googleAuthGetAuthCode(fakeGoogleEmail)).thenReturn(fakeGoogleToken);
 
         onView(withId(R.id.sign_in_google_button)).perform(click());
 
@@ -451,7 +451,7 @@ public class AuthenticatorActivityTest
     public void testAuthTokenReceived_validAccessToken_createsOhmageAccount() throws Throwable {
         final AccessToken fakeAccessToken = new AccessToken("token", "refresh", "user");
         setPlusClientFragmentSuccessfullyConnects();
-        when(fakeAuthHelper.googleAuthGetToken(fakeGoogleEmail)).thenReturn(fakeGoogleToken);
+        when(fakeAuthHelper.googleAuthGetAuthCode(fakeGoogleEmail)).thenReturn(fakeGoogleToken);
         // For some reason the argument captor messes up the next test so I'm doing this
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {

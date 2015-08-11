@@ -60,11 +60,8 @@ public class AuthUtil {
                 "email",
                 "profile"
         };
-
         public static final String ACCESS_TOKEN_SCOPE = "oauth2:" + TextUtils.join(" ", SCOPES);
-
         public static final String CODE_SCOPE = "oauth2:server:client_id:48636836762-mulldgpmet2r4s3f16s931ea9crcc64m.apps.googleusercontent.com:api_scope:" + TextUtils.join(" ", SCOPES);
-//        public static final String CODE_SCOPE = "oauth2:server:client_id:494798802772-2jom9to52beivt0vb1g4o0fhejgqsnko.apps.googleusercontent.com:api_scope:" + TextUtils.join(" ", SCOPES);
     }
 
     /**

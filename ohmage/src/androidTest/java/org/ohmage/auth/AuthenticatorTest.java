@@ -172,7 +172,7 @@ public class AuthenticatorTest extends InjectedAndroidTestCase {
         mAuthenticator.getAuthToken(null, fakeAccount, AuthUtil.AUTHTOKEN_TYPE, null);
 
         verify(fakeAccountManager).getUserData(fakeAccount, Authenticator.USER_DATA_GOOGLE_ACCOUNT);
-        verify(fakeAuthHelper).googleAuthGetToken(fakeGoogleEmail);
+        verify(fakeAuthHelper).googleAuthGetAuthCode(fakeGoogleEmail);
     }
 
     public void testGetAuthToken_userRecoverableErrorWhenAuthtokenFromGoogle_sendsErrorViaIntent()
@@ -290,7 +290,7 @@ public class AuthenticatorTest extends InjectedAndroidTestCase {
     }
 
     private void setGetGoogleAuthTokenResult(Exception e) throws Exception {
-        OngoingStubbing<String> stub = when(fakeAuthHelper.googleAuthGetToken(fakeGoogleEmail));
+        OngoingStubbing<String> stub = when(fakeAuthHelper.googleAuthGetAuthCode(fakeGoogleEmail));
         if (e == null) {
             stub.thenReturn(stubGoogleToken);
         } else {

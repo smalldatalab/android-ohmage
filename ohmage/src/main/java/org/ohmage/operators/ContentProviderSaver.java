@@ -18,6 +18,7 @@ package org.ohmage.operators;
 
 import android.content.ContentValues;
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -50,11 +51,16 @@ public class ContentProviderSaver implements Action1<Savable> {
     }
 
     @Override public void call(Savable savable) {
-        Uri uri = savable.getUrl();
-        if (mIsSyncAdapter)
-            uri = OhmageSyncAdapter.appendSyncAdapterParam(uri);
-        Ohmage.app().getContentResolver().insert(uri, savable.toContentValues(this));
-        savable.onSaved();
+        try {
+            Log.e(ContentProviderSaver.class.getSimpleName(), savable.toString());
+            Uri uri = savable.getUrl();
+            if (mIsSyncAdapter)
+                uri = OhmageSyncAdapter.appendSyncAdapterParam(uri);
+            Ohmage.app().getContentResolver().insert(uri, savable.toContentValues(this));
+            savable.onSaved();
+        }catch (Exception e){
+            Log.e(ContentProviderSaver.class.getSimpleName(), "Error ", e);
+        }
     }
 
     public Gson gson() {

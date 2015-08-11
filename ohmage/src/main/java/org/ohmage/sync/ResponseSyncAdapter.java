@@ -36,6 +36,7 @@ import android.os.RemoteException;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -147,7 +148,8 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
                     final long localResponseId = cursor.getLong(0);
                     Observable<Long> responseId = uploadResponse.map(new Func1<Response, Long>() {
                         @Override public Long call(Response response) {
-                            return localResponseId;
+                            throw new RuntimeException();
+                            //return localResponseId;
                         }
                     });
 
@@ -170,16 +172,19 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
                         filesToDelete = Observable.mergeDelayError(responseFiles, filesToDelete);
                     }
                 } catch (AuthenticationException e) {
+                    Crashlytics.logException(e);
                     Log.e(TAG, "Auth", e);
                     syncResult.stats.numAuthExceptions++;
+                } catch (Exception e){
+                    Log.e(TAG, "Other uploading error", e);
+                    Crashlytics.logException(e);
                 }
             }
             cursor.close();
 
-
-
         } catch (RemoteException e) {
             Log.e(TAG, "Remote", e);
+            Crashlytics.logException(e);
             syncResult.stats.numIoExceptions++;
         } finally {
             if (cursor != null)
@@ -209,7 +214,9 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
                 }
 
                 @Override public void onError(Throwable e) {
-                    // Delete the successful ones
+                    // Send error report
+                    Log.e(TAG, "Upload failed", e);
+                    Crashlytics.logException(e);
                     onCompleted();
                 }
 
@@ -232,7 +239,7 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
                 }
 
                 @Override public void onError(Throwable e) {
-
+                    Crashlytics.logException(e);
                 }
 
                 @Override public void onNext(ResponseFiles responseFiles) {
@@ -265,7 +272,6 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
         header.id = metadata.get("id").getAsString();
         JsonObject location = metadata.get("location") == null ? null : metadata.get("location").getAsJsonObject();
         DataPointTypedOutput point = new DataPointTypedOutput((JsonObject)gson.toJsonTree(header), location, body, files);
-
         // Make the call to upload responses
         return ohmageService.uploadDataPoint(point).cache();
     }

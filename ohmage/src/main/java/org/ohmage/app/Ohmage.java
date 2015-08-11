@@ -18,6 +18,9 @@ package org.ohmage.app;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 import org.ohmage.dagger.AndroidModule;
 import org.ohmage.dagger.OhmageModule;
 import org.ohmage.provider.OhmageContract;
@@ -65,9 +68,11 @@ public class Ohmage extends Application {
      */
     private ObjectGraph applicationGraph;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         self = this;
 
