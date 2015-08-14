@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.SignInButton;
 
@@ -72,9 +73,8 @@ public class AuthenticateFragment extends TransitionFragment implements View.OnC
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_authenticate, container, false);
 
-        SignInButton signInButton = (SignInButton) view.findViewById(R.id.sign_in_google_button);
-        signInButton.setOnClickListener(this);
-        signInButton.setSize(SignInButton.SIZE_WIDE);
+        view.findViewById(R.id.sign_in_google_button).setOnClickListener(this);
+        view.findViewById(R.id.login_button).setOnClickListener(this);
 
         // Allow user the change the DSU URL
         editDsuUrl = (TextView) view.findViewById(R.id.edit_dsu_url);
@@ -107,10 +107,10 @@ public class AuthenticateFragment extends TransitionFragment implements View.OnC
             }
         });
 
-        Button createAccount = (Button) view.findViewById(R.id.create_account_button);
-        createAccount.setOnClickListener(this);
-        Button signInEmail = (Button) view.findViewById(R.id.sign_in_email_button);
-        signInEmail.setOnClickListener(this);
+//        Button createAccount = (Button) view.findViewById(R.id.create_account_button);
+//        createAccount.setOnClickListener(this);
+//        Button signInEmail = (Button) view.findViewById(R.id.sign_in_email_button);
+//        signInEmail.setOnClickListener(this);
 
         mAuthLoadingView = view.findViewById(R.id.authenticate_loading);
         mAuthButtonsView = view.findViewById(R.id.authenticate_buttons);
@@ -195,11 +195,16 @@ public class AuthenticateFragment extends TransitionFragment implements View.OnC
             case R.id.sign_in_google_button:
                 mCallbacks.onGoogleSignInClick();
                 break;
-            case R.id.create_account_button:
-                mCallbacks.onCreateAccountClick();
-                break;
-            case R.id.sign_in_email_button:
-                mCallbacks.onEmailSignInClick();
+            case R.id.login_button:
+                final String username = ((EditText) getActivity().findViewById(R.id.username)).getText().toString();
+                final String password = ((EditText) getActivity().findViewById(R.id.password)).getText().toString();
+
+                if (username.isEmpty() || password.isEmpty()){
+                    Toast.makeText(getActivity(), "You must enter a username and password.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                mCallbacks.onOmhSignInClick(username, password);
                 break;
         }
     }
@@ -207,8 +212,6 @@ public class AuthenticateFragment extends TransitionFragment implements View.OnC
     public static interface Callbacks {
         void onGoogleSignInClick();
 
-        void onCreateAccountClick();
-
-        void onEmailSignInClick();
+        void onOmhSignInClick(String username, String password);
     }
 }

@@ -149,6 +149,13 @@ public interface OhmageService {
 
     @Headers(AuthUtil.OMH_AUTH_HEADER)
     @FormUrlEncoded
+    @POST("/oauth/token") void getAccessTokenWithOmhUserPassword(
+            @Field("grant_type") String grantType,
+            @Field("username") String username,
+            @Field("password") String password, CancelableCallback<AccessToken> callback);
+
+    @Headers(AuthUtil.OMH_AUTH_HEADER)
+    @FormUrlEncoded
     @POST("/oauth/token") AccessToken refreshAccessToken(@Field("refresh_token") String refreshToken, @Field("grant_type") String type)
             throws AuthenticationException;
 

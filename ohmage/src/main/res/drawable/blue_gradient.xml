@@ -23,5 +23,6 @@
         android:startColor="#5517acf4"
         android:endColor="@color/ohmage_dark_blue"
         android:type="radial"
-        android:gradientRadius="500" />
+        android:gradientRadius="500"
+        android:centerY=".3"/>
 </shape>

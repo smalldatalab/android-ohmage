@@ -280,10 +280,6 @@ public class MainActivity extends InjectedActionBarActivity
         }
 
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                //TODO: show settings
-                return true;
-
             case R.id.action_sign_out:
                 mLoggingOut = true;
                 FragmentManager fm = getSupportFragmentManager();

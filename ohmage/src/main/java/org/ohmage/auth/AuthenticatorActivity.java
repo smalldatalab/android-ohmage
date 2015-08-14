@@ -93,6 +93,7 @@ public class AuthenticatorActivity extends AuthenticatorFragmentActivity impleme
     public static final String EXTRA_EMAIL = "extra_email";
 
     private boolean mClearDefaultAccount;
+    private String omhUsername;
 
     private AuthenticateFragment mAuthenticateFragment;
 
@@ -219,13 +220,55 @@ public class AuthenticatorActivity extends AuthenticatorFragmentActivity impleme
     }
 
     @Override
-    public void onCreateAccountClick() {
-        showCreateAccountFragment(AuthUtil.GrantType.CLIENT_CREDENTIALS, null);
-    }
+    public void onOmhSignInClick(String username, String password) {
+        showProgress(true);
+        omhUsername = username;
 
-    @Override
-    public void onEmailSignInClick() {
-        showSignInFragment();
+        OhmageService.CancelableCallback<AccessToken> callback =
+                new OhmageService.CancelableCallback<AccessToken>() {
+                    @Override
+                    public void success(AccessToken accessToken, Response response) {
+                        if (!isCancelled()) {
+                            try {
+                                createAccount(omhUsername, accessToken);
+                            } catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override public void failure(RetrofitError error) {
+                        if (isCancelled()) {
+                            return;
+                        }
+
+                        if (error.getResponse().getStatus() == 400) {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                                        showProgress(false);
+                                    }
+                                    Toast.makeText(getBaseContext(), R.string.error_invalid_credentials, Toast.LENGTH_SHORT)
+                                                .show();
+                                }
+                            });
+                        } else if (error.getResponse().getStatus() == 404) {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                                        showProgress(false);
+                                    }
+                                    Toast.makeText(getBaseContext(), R.string.error_server_not_found, Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                            });
+                        } else {
+                            onRetrofitError(error);
+                        }
+                    }
+                };
+        ohmageService.getAccessTokenWithOmhUserPassword("password", username,
+                password, callback);
     }
 
     @Override

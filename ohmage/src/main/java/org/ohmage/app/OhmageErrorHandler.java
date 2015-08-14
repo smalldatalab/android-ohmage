@@ -55,6 +55,6 @@ public class OhmageErrorHandler implements ErrorHandler {
             return new AuthenticationException("Error authenticating with ohmage", cause);
         }
 
-        return new IOException(cause.getResponse().getStatus() + "(" + cause.getResponse().getReason() + ")", cause);
+        return cause;
     }
 }

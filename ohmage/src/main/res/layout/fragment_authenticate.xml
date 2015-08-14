@@ -20,13 +20,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AuthenticateActivity">
+    tools:context=".AuthenticateActivity"
+    android:theme="@style/Theme.AppCompat.Light">
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context="org.ohmage.mobility.LoginActivity">
+
 
         <ImageView
             android:id="@+id/logo"
@@ -35,71 +42,86 @@
             android:contentDescription="ohmage logo"
             android:src="@drawable/entrance_ohmage_icon_logo"
             android:layout_weight="1"
-            android:paddingTop="10dp" />
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_google_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:layout_above="@+id/sign_up_email_button"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:id="@+id/edit_dsu_url"
-            android:text="@string/edit_url"
-            android:textColor="#d3d3d3"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:gravity="center_horizontal"/>
+            android:layout_gravity="center"/>
+
 
         <LinearLayout
             android:id="@+id/authenticate_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:background="@drawable/splash_gradient_bottom">
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:hint="@string/username_hint"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:nextFocusDown="@+id/password"
+                android:background="@drawable/rect_text_edit"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_weight="3"
+                    android:hint="@string/password_hint"
+                    android:textSize="16sp"
+                    android:singleLine="true"
+                    android:password="true"
+                    android:background="@drawable/rect_text_edit"/>
 
                 <Button
-                    android:id="@+id/sign_in_email_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/email_signin_btn"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textStyle="bold"
-                    android:textColor="@color/common_signin_btn_text_light"
-                    android:text="@string/sign_in_with_email"
+                    android:id="@+id/login_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:visibility="gone"/>
+                    android:textSize="16sp"
+                    android:text="@string/login"
+                    />
 
-                <Button
-                    android:id="@+id/create_account_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/create_signin_btn"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/sign_up_with_ohmage"
-                    android:textStyle="bold"
-                    android:textColor="@color/common_signin_btn_text_light"
-                    android:layout_weight="1"
-                    android:visibility="gone"/>
             </LinearLayout>
 
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/or"
+                android:textSize="12sp"
+                android:padding="15dp"
+                android:textColor="#FFFFFF"/>
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_google_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_dsu_url"
+                android:text="@string/edit_url"
+                android:textColor="#FFF"
+                android:layout_alignParentRight="true"
+                android:gravity="right" />
         </LinearLayout>
+
+
     </LinearLayout>
 
     <ProgressBar
