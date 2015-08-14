@@ -1,19 +1,14 @@
 # Ignored by AndroidStudio
 *.iws
 *.iml
-.idea/modules.xml
+.idea/
 
 # Folders related to builds
 .gradle/
 **/build/
 
 # Local settings
-.idea/workspace.xml
 local.properties
 signing.gradle
 
-# User dictionaries
-.idea/dictionaries/
 
-# libraries
-.idea/libraries/
