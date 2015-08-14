@@ -196,9 +196,7 @@
             android:label="@string/install_dependencies_title" >
         </activity>
 
-        <meta-data
-            android:name="com.google.android.gms.analytics.globalConfigResource"
-            android:resource="@xml/analytics_global_tracker" />
+
 
         <meta-data
             android:name="io.fabric.ApiKey"

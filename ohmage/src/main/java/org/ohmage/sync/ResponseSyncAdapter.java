@@ -148,8 +148,7 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
                     final long localResponseId = cursor.getLong(0);
                     Observable<Long> responseId = uploadResponse.map(new Func1<Response, Long>() {
                         @Override public Long call(Response response) {
-                            throw new RuntimeException();
-                            //return localResponseId;
+                            return localResponseId;
                         }
                     });
 
