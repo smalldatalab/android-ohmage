@@ -68,6 +68,7 @@ import org.ohmage.prompts.PromptFragment;
 import org.ohmage.provider.ContentProviderReader;
 import org.ohmage.provider.StreamContentProvider;
 import org.ohmage.reminders.base.TriggerInit;
+import org.ohmage.log.AppLogSyncAdapter;
 import org.ohmage.sync.OhmageSyncAdapter;
 import org.ohmage.sync.ResponseSyncAdapter;
 import org.ohmage.sync.StreamSyncAdapter;
@@ -76,7 +77,6 @@ import org.ohmage.tasks.LogoutTaskFragment;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -121,6 +121,7 @@ import retrofit.converter.GsonConverter;
                 PromptFragment.class,
                 SurveyPromptLoader.class,
                 ResponseSyncAdapter.class,
+                AppLogSyncAdapter.class,
                 StreamsFragment.class,
                 InstallSurveyDependencies.class,
                 InstallSurveyDependenciesFragment.class,

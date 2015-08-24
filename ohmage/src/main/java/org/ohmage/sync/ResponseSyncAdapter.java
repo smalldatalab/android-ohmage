@@ -45,6 +45,7 @@ import org.apache.http.auth.AuthenticationException;
 import org.ohmage.app.Ohmage;
 import org.ohmage.app.OhmageService;
 import org.ohmage.auth.AuthUtil;
+import org.ohmage.log.AppLogManager;
 import org.ohmage.models.OmhDataPointHeader;
 import org.ohmage.models.SchemaId;
 import org.ohmage.provider.ResponseContract;
@@ -76,6 +77,8 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Inject Gson gson;
 
+    private Context mContext;
+
     private static final String TAG = ResponseSyncAdapter.class.getSimpleName();
 
     /**
@@ -83,6 +86,7 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
      */
     public ResponseSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
+        mContext = context;
         Ohmage.app().getApplicationGraph().inject(this);
     }
 
@@ -97,6 +101,7 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
             boolean autoInitialize,
             boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
+        mContext = context;
         Ohmage.app().getApplicationGraph().inject(this);
     }
 
@@ -120,6 +125,8 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
             syncResult.stats.numIoExceptions > 0 || syncResult.stats.numAuthExceptions > 0)
             return;
 
+
+
         // Upload responses
         Observable<Long> toDelete = null;
         Observable<ResponseFiles> filesToDelete = null;
@@ -133,6 +140,8 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
                             Responses.RESPONSE_EXTRAS}, null, null, null);
 
             while (cursor.moveToNext()) {
+                AppLogManager.logInfo(mContext, "SurveyUploadStarted", "App began sync upload of " +
+                        "the survey: " + cursor.getString(1));
                 final ResponseFiles files = gson.fromJson(cursor.getString(5), ResponseFiles.class);
                 try {
                     // Make the call to upload responses

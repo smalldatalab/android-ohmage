@@ -50,6 +50,7 @@ import org.ohmage.fragments.HomeFragment;
 import org.ohmage.fragments.OhmletsFragment;
 import org.ohmage.fragments.StreamsFragment;
 import org.ohmage.fragments.SurveysFragment;
+import org.ohmage.log.AppLogManager;
 import org.ohmage.reminders.ui.TriggerListActivity;
 import org.ohmage.tasks.LogoutTaskFragment;
 
@@ -214,6 +215,8 @@ public class MainActivity extends InjectedActionBarActivity
 
         // Watch to make sure the account still exists.
         accountManager.addOnAccountsUpdatedListener(this, null, true);
+
+        AppLogManager.logInfo(this, "AppHomeResumed", "The main app home page has been resumed.");
     }
 
     @Override protected void onPause() {

@@ -101,6 +101,18 @@
         </service>
 
         <service
+            android:name="org.ohmage.log.AppLogSyncService"
+            android:exported="true"
+            android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter_applog" />
+        </service>
+
+        <service
             android:name="org.ohmage.sync.OhmageSyncService"
             android:exported="true"
             android:process=":sync">
@@ -126,6 +138,13 @@
             android:name="org.ohmage.provider.ResponseContentProvider"
             android:label="@string/responses"
             android:authorities="org.ohmage.responses"
+            android:exported="true"
+            android:syncable="true" />
+
+        <provider
+            android:name="org.ohmage.log.AppLogContentProvider"
+            android:label="@string/applog"
+            android:authorities="org.ohmage.applog"
             android:exported="true"
             android:syncable="true" />
 

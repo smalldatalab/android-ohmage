@@ -27,6 +27,7 @@ import org.ohmage.models.Stream;
 import org.ohmage.models.Survey;
 import org.ohmage.models.Surveys;
 import org.ohmage.models.User;
+import org.ohmage.log.AppLogTypedOutput;
 import org.ohmage.sync.DataPointTypedOutput;
 import org.ohmage.sync.ResponseTypedOutput;
 import org.ohmage.sync.StreamWriterOutput;
@@ -164,6 +165,11 @@ public interface OhmageService {
 
     @POST("/dataPoints")
     Observable<Response> uploadDataPoint(@Body DataPointTypedOutput data)
+            throws AuthenticationException;
+
+
+    @POST("/dataPoints")
+    Response uploadAppLog(@Body AppLogTypedOutput data)
             throws AuthenticationException;
 
     // *** END OMH-DSU *** //

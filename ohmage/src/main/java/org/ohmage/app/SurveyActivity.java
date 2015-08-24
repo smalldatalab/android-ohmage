@@ -58,6 +58,8 @@ import org.ohmage.condition.Condition;
 import org.ohmage.condition.NoResponse;
 import org.ohmage.dagger.InjectedActionBarActivity;
 import org.ohmage.fragments.InstallDependenciesDialog;
+import org.ohmage.log.AppLogEntry;
+import org.ohmage.log.AppLogManager;
 import org.ohmage.models.ApkSet;
 import org.ohmage.prompts.AnswerablePrompt;
 import org.ohmage.prompts.Prompt;
@@ -158,6 +160,8 @@ public class SurveyActivity extends InjectedActionBarActivity
         } else {
             getSupportLoaderManager().initLoader(0, null, this);
         }
+
+        AppLogManager.logInfo(this, "SurveyStarted", "User started the survey: " + Surveys.getId(getIntent().getData()));
     }
 
     @Override
@@ -165,6 +169,8 @@ public class SurveyActivity extends InjectedActionBarActivity
         super.onResume();
         setUpLocationClientIfNeeded();
         mLocationClient.connect();
+
+        AppLogManager.logInfo(this, "SurveyResumed", "User resumed the survey: " + Surveys.getId(getIntent().getData()));
     }
 
     @Override
@@ -205,6 +211,7 @@ public class SurveyActivity extends InjectedActionBarActivity
     private void discardSurvey() {
         if(mPagerAdapter != null)
             mPagerAdapter.clearExtras();
+        AppLogManager.logInfo(this, "SurveyDiscarded", "User discarded the survey: " + Surveys.getId(getIntent().getData()));
         super.onBackPressed();
     }
 
@@ -267,9 +274,11 @@ public class SurveyActivity extends InjectedActionBarActivity
                         .withLocation(mLocationClient.getLastLocation())
                         .getMetadata()
         );
+
         mPagerAdapter.buildResponse(values);
         getContentResolver().insert(Responses.CONTENT_URI, values);
         Toast.makeText(this, "The response has been submitted. Thank you!", Toast.LENGTH_SHORT).show();
+        AppLogManager.logInfo(this, "SurveySubmitted", "User submitted the survey: " + Surveys.getId(getIntent().getData()));
         finish();
     }
 

@@ -70,6 +70,7 @@
     <string name="no_surveys">No Surveys</string>
     <string name="skip">Skip</string>
     <string name="responses">Responses</string>
+    <string name="applog">App Log</string>
     <string name="survey_conditions_error">The conditions for this survey are not set correctly.</string>
     <string name="discard">Discard</string>
     <string name="discard_survey_message">This survey will not be saved</string>
