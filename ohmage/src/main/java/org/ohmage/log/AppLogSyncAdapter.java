@@ -50,6 +50,7 @@ import retrofit.client.Response;
 public class AppLogSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static final String IS_SYNCADAPTER = "is_syncadapter";
+    public static final String CONTENT_AUTHORITY = "org.ohmage.applog";
 
     @Inject AccountManager am;
 

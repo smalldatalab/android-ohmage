@@ -16,11 +16,15 @@
 
 package org.ohmage.app;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
@@ -54,12 +58,14 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import org.ohmage.auth.AuthUtil;
 import org.ohmage.condition.Condition;
 import org.ohmage.condition.NoResponse;
 import org.ohmage.dagger.InjectedActionBarActivity;
 import org.ohmage.fragments.InstallDependenciesDialog;
 import org.ohmage.log.AppLogEntry;
 import org.ohmage.log.AppLogManager;
+import org.ohmage.log.AppLogSyncAdapter;
 import org.ohmage.models.ApkSet;
 import org.ohmage.prompts.AnswerablePrompt;
 import org.ohmage.prompts.Prompt;
@@ -92,6 +98,7 @@ public class SurveyActivity extends InjectedActionBarActivity
     private static final String TAG = SurveyActivity.class.getSimpleName();
 
     @Inject Gson gson;
+    @Inject AccountManager am;
 
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -110,6 +117,11 @@ public class SurveyActivity extends InjectedActionBarActivity
      * Location client to get accurate location
      */
     private LocationClient mLocationClient;
+
+    /**
+     * Tracks if survey is in progress
+     */
+    private boolean isFinished = false;
 
     private static final LocationRequest REQUEST = LocationRequest.create()
             .setInterval(5000)         // 5 seconds
@@ -161,7 +173,17 @@ public class SurveyActivity extends InjectedActionBarActivity
             getSupportLoaderManager().initLoader(0, null, this);
         }
 
-        AppLogManager.logInfo(this, "SurveyStarted", "User started the survey: " + Surveys.getId(getIntent().getData()));
+        AppLogManager.logInfo(this, "SurveyStarted", "User started the survey: " +
+                Surveys.getId(getIntent().getData()));
+
+        // DO THIS HERE TEMPORARILY, TO ENABLE SYNC ON PUSHED APP UPDATE
+        Account[] accounts = am.getAccountsByType(AuthUtil.ACCOUNT_TYPE);
+        if(accounts.length == 1) {
+            Account account = accounts[0];
+            ContentResolver.setSyncAutomatically(account, AppLogSyncAdapter.CONTENT_AUTHORITY, true);
+            ContentResolver.addPeriodicSync(account, AppLogSyncAdapter.CONTENT_AUTHORITY,
+                    new Bundle(), AuthUtil.SYNC_INTERVAL);
+        }
     }
 
     @Override
@@ -170,7 +192,8 @@ public class SurveyActivity extends InjectedActionBarActivity
         setUpLocationClientIfNeeded();
         mLocationClient.connect();
 
-        AppLogManager.logInfo(this, "SurveyResumed", "User resumed the survey: " + Surveys.getId(getIntent().getData()));
+        AppLogManager.logInfo(this, "SurveyResumed", "User resumed the survey: " +
+                Surveys.getId(getIntent().getData()));
     }
 
     @Override
@@ -178,6 +201,15 @@ public class SurveyActivity extends InjectedActionBarActivity
         super.onPause();
         if (mLocationClient != null) {
             mLocationClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(!isFinished){
+            AppLogManager.logInfo(this, "SurveyStopped", "User left survey without submitting or discarding: " +
+                    Surveys.getId(getIntent().getData()));
         }
     }
 
@@ -209,9 +241,12 @@ public class SurveyActivity extends InjectedActionBarActivity
     }
 
     private void discardSurvey() {
+        isFinished = true;
+
         if(mPagerAdapter != null)
             mPagerAdapter.clearExtras();
-        AppLogManager.logInfo(this, "SurveyDiscarded", "User discarded the survey: " + Surveys.getId(getIntent().getData()));
+        AppLogManager.logInfo(this, "SurveyDiscarded", "User discarded the survey: " +
+                Surveys.getId(getIntent().getData()));
         super.onBackPressed();
     }
 
@@ -263,6 +298,8 @@ public class SurveyActivity extends InjectedActionBarActivity
      * to the content provider, and finally show the Toast and return to the previous activity
      */
     public void submit() {
+        isFinished = true;
+
         // Tell reminders that the survey was taken
         TriggerFramework.notifySurveyTaken(this, Surveys.getId(getIntent().getData()));
 
@@ -277,8 +314,10 @@ public class SurveyActivity extends InjectedActionBarActivity
 
         mPagerAdapter.buildResponse(values);
         getContentResolver().insert(Responses.CONTENT_URI, values);
-        Toast.makeText(this, "The response has been submitted. Thank you!", Toast.LENGTH_SHORT).show();
-        AppLogManager.logInfo(this, "SurveySubmitted", "User submitted the survey: " + Surveys.getId(getIntent().getData()));
+        Toast.makeText(this, "The response has been submitted. Thank you!",
+                Toast.LENGTH_SHORT).show();
+        AppLogManager.logInfo(this, "SurveySubmitted", "User submitted the survey: " +
+                Surveys.getId(getIntent().getData()));
         finish();
     }
 

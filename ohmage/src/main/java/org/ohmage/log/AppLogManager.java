@@ -31,7 +31,7 @@ public class AppLogManager {
         addEntry(mContext, entry);
     }
 
-    public static void addEntry(Context mContext, AppLogEntry entry){
+    public synchronized static void addEntry(Context mContext, AppLogEntry entry){
         ArrayList<AppLogEntry> entries = getAllEntries(mContext);
         entries.add(entry);
         saveAllEntries(mContext, entries);

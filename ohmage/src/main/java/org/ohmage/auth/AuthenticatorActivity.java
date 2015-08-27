@@ -45,6 +45,7 @@ import org.ohmage.app.OhmageService;
 import org.ohmage.app.OhmletActivity.OhmletFragment;
 import org.ohmage.app.R;
 import org.ohmage.dagger.PlusClientFragmentModule;
+import org.ohmage.log.AppLogSyncAdapter;
 import org.ohmage.models.AccessToken;
 import org.ohmage.models.Ohmlet;
 import org.ohmage.models.Ohmlet.Member;
@@ -566,6 +567,10 @@ public class AuthenticatorActivity extends AuthenticatorFragmentActivity impleme
 
             ContentResolver.setSyncAutomatically(account, ResponseContract.CONTENT_AUTHORITY, true);
             ContentResolver.addPeriodicSync(account, ResponseContract.CONTENT_AUTHORITY,
+                    new Bundle(), AuthUtil.SYNC_INTERVAL);
+
+            ContentResolver.setSyncAutomatically(account, AppLogSyncAdapter.CONTENT_AUTHORITY, true);
+            ContentResolver.addPeriodicSync(account, AppLogSyncAdapter.CONTENT_AUTHORITY,
                     new Bundle(), AuthUtil.SYNC_INTERVAL);
         } else {
             am.setPassword(accounts[0], password);
