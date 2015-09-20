@@ -73,6 +73,7 @@ import org.ohmage.prompts.PromptFragment;
 import org.ohmage.prompts.SurveyItemFragment;
 import org.ohmage.provider.OhmageContract;
 import org.ohmage.provider.OhmageContract.Surveys;
+import org.ohmage.provider.ResponseContract;
 import org.ohmage.provider.ResponseContract.Responses;
 import org.ohmage.reminders.glue.TriggerFramework;
 import org.ohmage.streams.StreamPointBuilder;
@@ -297,7 +298,7 @@ public class SurveyActivity extends InjectedActionBarActivity
      * Submit the survey. First tell reminders that the survey was taken, then insert the response
      * to the content provider, and finally show the Toast and return to the previous activity
      */
-    public void submit() {
+    public synchronized void submit() {
         isFinished = true;
 
         // Tell reminders that the survey was taken
@@ -318,12 +319,27 @@ public class SurveyActivity extends InjectedActionBarActivity
                 Toast.LENGTH_SHORT).show();
         AppLogManager.logInfo(this, "SurveySubmitted", "User submitted the survey: " +
                 Surveys.getId(getIntent().getData()));
+
+        // Force a sync to upload data
+        Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(
+                ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        settingsBundle.putBoolean(
+                ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+
+        Account[] accounts = am.getAccountsByType(AuthUtil.ACCOUNT_TYPE);
+        if(accounts.length == 1) {
+            Account account = accounts[0];
+            getContentResolver().requestSync(account, ResponseContract.CONTENT_AUTHORITY, settingsBundle);
+            getContentResolver().requestSync(account, AppLogSyncAdapter.CONTENT_AUTHORITY, settingsBundle);
+        }
         finish();
     }
 
     @Override public void onConnected(Bundle bundle) {
         mLocationClient.requestLocationUpdates(REQUEST, new LocationListener() {
-            @Override public void onLocationChanged(Location location) {
+            @Override
+            public void onLocationChanged(Location location) {
             }
         });
     }
