@@ -176,15 +176,6 @@ public class SurveyActivity extends InjectedActionBarActivity
 
         AppLogManager.logInfo(this, "SurveyStarted", "User started the survey: " +
                 Surveys.getId(getIntent().getData()));
-
-        // DO THIS HERE TEMPORARILY, TO ENABLE SYNC ON PUSHED APP UPDATE
-        Account[] accounts = am.getAccountsByType(AuthUtil.ACCOUNT_TYPE);
-        if(accounts.length == 1) {
-            Account account = accounts[0];
-            ContentResolver.setSyncAutomatically(account, AppLogSyncAdapter.CONTENT_AUTHORITY, true);
-            ContentResolver.addPeriodicSync(account, AppLogSyncAdapter.CONTENT_AUTHORITY,
-                    new Bundle(), AuthUtil.SYNC_INTERVAL);
-        }
     }
 
     @Override
