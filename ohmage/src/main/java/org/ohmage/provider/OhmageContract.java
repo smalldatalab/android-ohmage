@@ -178,7 +178,7 @@ public class OhmageContract {
 
         public static Long getVersion(Uri uri) {
             List<String> path = uri.getPathSegments();
-            return (path.size() < 3) ? null : Long.parseLong(path.get(2));
+            return (path.size() < 3) ? 1 : Long.parseLong(path.get(2));
         }
     }
 
