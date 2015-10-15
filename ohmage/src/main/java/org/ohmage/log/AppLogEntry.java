@@ -98,4 +98,17 @@ public class AppLogEntry {
         return point;
     }
 
+    @Override
+    public boolean equals(Object other){
+        if (other == null) return false;
+        if (other == this) return true;
+        if (!(other instanceof AppLogEntry)) return false;
+        AppLogEntry otherMyClass = (AppLogEntry) other;
+        if (this.logTime.equals(otherMyClass.logTime) && this.event.equals(otherMyClass.event)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

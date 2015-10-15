@@ -86,8 +86,9 @@ public class AppLogSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     @Override
-    public void onPerformSync(Account account, Bundle extras, String authority,
+    public synchronized void onPerformSync(Account account, Bundle extras, String authority,
             final ContentProviderClient provider, final SyncResult syncResult) {
+        Log.d(TAG, "Start onPerformSync()");
         // Check for authtoken
         String token = null;
         try {
@@ -102,21 +103,28 @@ public class AppLogSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // If the token wasn't found or there was a problem, we can stop now
         if (token == null || syncResult.stats.numSkippedEntries > 0 ||
-            syncResult.stats.numIoExceptions > 0 || syncResult.stats.numAuthExceptions > 0)
+            syncResult.stats.numIoExceptions > 0 || syncResult.stats.numAuthExceptions > 0){
+            Log.d(TAG, "No token found or there was a problem.");
             return;
+        }
+
 
         // Upload data
         ArrayList<AppLogEntry> entries = AppLogManager.getAllEntries(mContext);
+        ArrayList<AppLogEntry> removeEntries = new ArrayList<AppLogEntry>();
         for(AppLogEntry entry : entries){
             try {
                 AppLogTypedOutput point = entry.toOmhTypedOutput();
                 Response uploadResponse = null;
                 uploadResponse = ohmageService.uploadAppLog(point);
+                if(uploadResponse.getStatus() == 201){
+                    removeEntries.add(entry);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        AppLogManager.removeAllEntries(mContext);
+        AppLogManager.removeEntries(mContext, removeEntries);
     }
 
     public static Uri appendSyncAdapterParam(Uri uri) {
