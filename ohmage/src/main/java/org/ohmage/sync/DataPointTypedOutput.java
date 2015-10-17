@@ -21,6 +21,7 @@ import android.util.Log;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.ohmage.app.BuildConfig;
 import org.ohmage.sync.ResponseTypedOutput.ResponseFiles;
 
 import java.io.File;
@@ -43,7 +44,7 @@ public class DataPointTypedOutput implements TypedOutput {
     private static final JsonObject acquisitionProvenance;
     static {
         acquisitionProvenance = new JsonObject();
-        acquisitionProvenance.addProperty("source_name", "Ohmage-Android-1.0");
+        acquisitionProvenance.addProperty("source_name", "Ohmage-Android-" + BuildConfig.VERSION_NAME);
         acquisitionProvenance.addProperty("modality", "self-reported");
 
     }

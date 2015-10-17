@@ -106,8 +106,9 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     @Override
-    public void onPerformSync(Account account, Bundle extras, String authority,
+    public synchronized void onPerformSync(Account account, Bundle extras, String authority,
             final ContentProviderClient provider, final SyncResult syncResult) {
+        Log.d(TAG, "Start onPerformSync()");
         // Check for authtoken
         String token = null;
         try {
@@ -122,10 +123,10 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // If the token wasn't found or there was a problem, we can stop now
         if (token == null || syncResult.stats.numSkippedEntries > 0 ||
-            syncResult.stats.numIoExceptions > 0 || syncResult.stats.numAuthExceptions > 0)
+            syncResult.stats.numIoExceptions > 0 || syncResult.stats.numAuthExceptions > 0){
+            Log.d(TAG, "No token found or there was a problem.");
             return;
-
-
+        }
 
         // Upload responses
         Observable<Long> toDelete = null;
@@ -138,10 +139,8 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
                     new String[]{BaseColumns._ID, Responses.SURVEY_ID, Responses.SURVEY_VERSION,
                             Responses.RESPONSE_DATA, Responses.RESPONSE_METADATA,
                             Responses.RESPONSE_EXTRAS}, null, null, null);
-
+            AppLogManager.logInfo(mContext, "ResponsesSyncStarted", cursor.getCount() + " surveys to upload.");
             while (cursor.moveToNext()) {
-                AppLogManager.logInfo(mContext, "SurveyUploadStarted", "App began sync upload of " +
-                        "the survey: " + cursor.getString(1));
                 final ResponseFiles files = gson.fromJson(cursor.getString(5), ResponseFiles.class);
                 try {
                     // Make the call to upload responses
@@ -200,6 +199,7 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         if(toDelete != null) {
+            Log.d(TAG, "Start deleting responses.");
             toDelete.flatMap(new Func1<Long, Observable<ContentProviderOperation>>() {
                 @Override public Observable<ContentProviderOperation> call(Long aLong) {
                     return Observable.from(ContentProviderOperation.newDelete(appendSyncAdapterParam(
@@ -280,6 +280,9 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
         header.id = metadata.get("id").getAsString();
         JsonObject location = metadata.get("location") == null ? null : metadata.get("location").getAsJsonObject();
         DataPointTypedOutput point = new DataPointTypedOutput((JsonObject)gson.toJsonTree(header), location, body, files);
+
+        AppLogManager.logInfo(mContext, "SurveyUploadStarted", "About to send upload request.");
+
         // Make the call to upload responses
         return ohmageService.uploadDataPoint(point).cache();
     }

@@ -18,6 +18,7 @@ package org.ohmage.log;
 
 import com.google.gson.JsonObject;
 
+import org.ohmage.app.BuildConfig;
 import org.ohmage.sync.ResponseTypedOutput.ResponseFiles;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class AppLogTypedOutput implements TypedOutput {
     private static final JsonObject acquisitionProvenance;
     static {
         acquisitionProvenance = new JsonObject();
-        acquisitionProvenance.addProperty("source_name", "Ohmage-Android-1.0");
+        acquisitionProvenance.addProperty("source_name", "Ohmage-Android-" + BuildConfig.VERSION_NAME);
     }
 
     public AppLogTypedOutput(JsonObject header, JsonObject data) {
