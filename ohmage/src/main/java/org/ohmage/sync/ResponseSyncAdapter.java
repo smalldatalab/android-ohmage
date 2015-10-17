@@ -139,7 +139,7 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
                     new String[]{BaseColumns._ID, Responses.SURVEY_ID, Responses.SURVEY_VERSION,
                             Responses.RESPONSE_DATA, Responses.RESPONSE_METADATA,
                             Responses.RESPONSE_EXTRAS}, null, null, null);
-            AppLogManager.logInfo(mContext, "ResponsesSyncStarted", cursor.getCount() + " surveys to upload.");
+            AppLogManager.getInstance().logInfo(mContext, "ResponsesSyncStarted", cursor.getCount() + " surveys to upload.");
             while (cursor.moveToNext()) {
                 final ResponseFiles files = gson.fromJson(cursor.getString(5), ResponseFiles.class);
                 try {
@@ -281,7 +281,7 @@ public class ResponseSyncAdapter extends AbstractThreadedSyncAdapter {
         JsonObject location = metadata.get("location") == null ? null : metadata.get("location").getAsJsonObject();
         DataPointTypedOutput point = new DataPointTypedOutput((JsonObject)gson.toJsonTree(header), location, body, files);
 
-        AppLogManager.logInfo(mContext, "SurveyUploadStarted", "About to send upload request.");
+        AppLogManager.getInstance().logInfo(mContext, "SurveyUploadStarted", "About to send upload request.");
 
         // Make the call to upload responses
         return ohmageService.uploadDataPoint(point).cache();

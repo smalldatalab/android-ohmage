@@ -97,8 +97,7 @@
 
         <service
             android:name="org.ohmage.sync.ResponseSyncService"
-            android:exported="true"
-            android:process=":sync">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -109,8 +108,7 @@
 
         <service
             android:name="org.ohmage.log.AppLogSyncService"
-            android:exported="true"
-            android:process=":sync">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>

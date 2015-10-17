@@ -110,7 +110,7 @@ public class AppLogSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
         // Upload data
-        ArrayList<AppLogEntry> entries = AppLogManager.getAllEntries(mContext);
+        ArrayList<AppLogEntry> entries = AppLogManager.getInstance().getAllEntries(mContext);
         ArrayList<AppLogEntry> removeEntries = new ArrayList<AppLogEntry>();
         for(AppLogEntry entry : entries){
             try {
@@ -118,13 +118,14 @@ public class AppLogSyncAdapter extends AbstractThreadedSyncAdapter {
                 Response uploadResponse = null;
                 uploadResponse = ohmageService.uploadAppLog(point);
                 if(uploadResponse.getStatus() == 201){
+                    Log.d("AppLogSyncAdapter", "Success uploading " + entry.event);
                     removeEntries.add(entry);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        AppLogManager.removeEntries(mContext, removeEntries);
+        AppLogManager.getInstance().removeEntries(mContext, removeEntries);
     }
 
     public static Uri appendSyncAdapterParam(Uri uri) {

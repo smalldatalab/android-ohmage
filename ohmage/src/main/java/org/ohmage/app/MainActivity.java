@@ -216,7 +216,7 @@ public class MainActivity extends InjectedActionBarActivity
         // Watch to make sure the account still exists.
         accountManager.addOnAccountsUpdatedListener(this, null, true);
 
-        AppLogManager.logInfo(this, "AppHomeResumed", "The main app home page has been resumed.");
+        AppLogManager.getInstance().logInfo(this, "AppHomeResumed", "The main app home page has been resumed.");
     }
 
     @Override protected void onPause() {

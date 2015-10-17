@@ -174,7 +174,7 @@ public class SurveyActivity extends InjectedActionBarActivity
             getSupportLoaderManager().initLoader(0, null, this);
         }
 
-        AppLogManager.logInfo(this, "SurveyStarted", "User started the survey: " +
+        AppLogManager.getInstance().logInfo(this, "SurveyStarted", "User started the survey: " +
                 Surveys.getId(getIntent().getData()));
     }
 
@@ -184,7 +184,7 @@ public class SurveyActivity extends InjectedActionBarActivity
         setUpLocationClientIfNeeded();
         mLocationClient.connect();
 
-        AppLogManager.logInfo(this, "SurveyResumed", "User resumed the survey: " +
+        AppLogManager.getInstance().logInfo(this, "SurveyResumed", "User resumed the survey: " +
                 Surveys.getId(getIntent().getData()));
     }
 
@@ -200,7 +200,7 @@ public class SurveyActivity extends InjectedActionBarActivity
     public void onStop() {
         super.onStop();
         if(!isFinished){
-            AppLogManager.logInfo(this, "SurveyStopped", "User left survey without submitting or discarding: " +
+            AppLogManager.getInstance().logInfo(this, "SurveyStopped", "User left survey without submitting or discarding: " +
                     Surveys.getId(getIntent().getData()));
         }
     }
@@ -237,7 +237,7 @@ public class SurveyActivity extends InjectedActionBarActivity
 
         if(mPagerAdapter != null)
             mPagerAdapter.clearExtras();
-        AppLogManager.logInfo(this, "SurveyDiscarded", "User discarded the survey: " +
+        AppLogManager.getInstance().logInfo(this, "SurveyDiscarded", "User discarded the survey: " +
                 Surveys.getId(getIntent().getData()));
         super.onBackPressed();
     }
@@ -308,7 +308,7 @@ public class SurveyActivity extends InjectedActionBarActivity
         getContentResolver().insert(Responses.CONTENT_URI, values);
         Toast.makeText(this, "The response has been submitted. Thank you!",
                 Toast.LENGTH_SHORT).show();
-        AppLogManager.logInfo(this, "SurveySubmitted", "User submitted the survey: " +
+        AppLogManager.getInstance().logInfo(this, "SurveySubmitted", "User submitted the survey: " +
                 Surveys.getId(getIntent().getData()));
 
         // Force a sync to upload data
