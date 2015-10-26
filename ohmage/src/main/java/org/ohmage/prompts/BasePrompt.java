@@ -104,6 +104,7 @@ public class BasePrompt implements Prompt {
             map.put("string_multi_choice_prompt", MultiChoicePrompt.class);
             map.put("text_prompt", TextPrompt.class);
             map.put("timestamp_prompt", TimestampPrompt.class);
+            map.put("vas_prompt", VisualAnalogScalePrompt.class);
         }
 
         public BasePrompt deserialize(JsonElement json, Type typeOfT,
