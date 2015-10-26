@@ -298,11 +298,19 @@ public class SurveyActivity extends InjectedActionBarActivity
         ContentValues values = new ContentValues();
         values.put(Responses.SURVEY_ID, Surveys.getId(getIntent().getData()));
         values.put(Responses.SURVEY_VERSION, Surveys.getVersion(getIntent().getData()));
-        values.put(Responses.RESPONSE_METADATA,
-                new StreamPointBuilder().now().withId()
-                        .withLocation(mLocationClient.getLastLocation())
-                        .getMetadata()
-        );
+        if(mLocationClient != null && mLocationClient.isConnected()){
+            values.put(Responses.RESPONSE_METADATA,
+                    new StreamPointBuilder().now().withId()
+                            .withLocation(mLocationClient.getLastLocation())
+                            .getMetadata()
+            );
+        } else {
+            values.put(Responses.RESPONSE_METADATA,
+                    new StreamPointBuilder().now().withId()
+                            .getMetadata()
+            );
+        }
+
 
         mPagerAdapter.buildResponse(values);
         getContentResolver().insert(Responses.CONTENT_URI, values);
@@ -327,7 +335,8 @@ public class SurveyActivity extends InjectedActionBarActivity
         finish();
     }
 
-    @Override public void onConnected(Bundle bundle) {
+    @Override
+    public void onConnected(Bundle bundle) {
         mLocationClient.requestLocationUpdates(REQUEST, new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
