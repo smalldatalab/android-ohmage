@@ -83,25 +83,25 @@ public class ImagePrompt extends MediaPrompt {
         @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             if (resultCode == Activity.RESULT_OK) {
-                //TODO: resize image
+                // Sample down image quality to reduce memory reqs
                 setValue(mFile);
-                Bitmap bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath());
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(mFile.getAbsolutePath(), options);
+                options.inSampleSize = calculateInSampleSize(options, 200, 300);
+                options.inJustDecodeBounds = false;
+                Bitmap bitmap = BitmapFactory.decodeFile(mFile.getAbsolutePath(), options);
                 ImageView imgView = (ImageView) this.getView().findViewById(R.id.img);
                 imgView.getLayoutParams().height = 300;
                 imgView.requestLayout();
                 imgView.setImageBitmap(bitmap);
 
-                // Jared: Hide other view items other than image
-                // ANDY: I choose to keep the text view so the participant can recall what is
-                // the image for when retake
-               // ((TextView) this.getView().findViewById(R.id.text)).setVisibility(View.GONE);
                 ((Button) this.getView().findViewById(R.id.launch)).setVisibility(View.GONE);
 
                 // Change the skip button to a retake button
                 Button skipButton = (Button) this.getView().findViewById(R.id.skip);
                 skipButton.setText("Retake Photo");
                 skipButton.setVisibility(View.VISIBLE);
-
 
                 Button okButton = (Button) this.getView().findViewById(R.id.ok);
                 okButton.setText("Ok");
@@ -125,6 +125,29 @@ public class ImagePrompt extends MediaPrompt {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mFile));
                 startActivityForResult(intent, REQUEST_CODE);
             }
+        }
+
+        public int calculateInSampleSize(
+                BitmapFactory.Options options, int reqWidth, int reqHeight) {
+            // Raw height and width of image
+            final int height = options.outHeight;
+            final int width = options.outWidth;
+            int inSampleSize = 1;
+
+            if (height > reqHeight || width > reqWidth) {
+
+                final int halfHeight = height / 2;
+                final int halfWidth = width / 2;
+
+                // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+                // height and width larger than the requested height and width.
+                while ((halfHeight / inSampleSize) > reqHeight
+                        && (halfWidth / inSampleSize) > reqWidth) {
+                    inSampleSize *= 2;
+                }
+            }
+
+            return inSampleSize;
         }
     }
 }
