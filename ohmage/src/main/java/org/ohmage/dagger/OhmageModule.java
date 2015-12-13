@@ -63,6 +63,7 @@ import org.ohmage.fragments.StreamsFragment;
 import org.ohmage.fragments.SurveysFragment;
 import org.ohmage.operators.ContentProviderSaver;
 import org.ohmage.prompts.BasePrompt;
+import org.ohmage.prompts.MapPrompt;
 import org.ohmage.prompts.Prompt;
 import org.ohmage.prompts.PromptFragment;
 import org.ohmage.provider.ContentProviderReader;
@@ -147,17 +148,19 @@ public class OhmageModule {
         GsonBuilder gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .registerTypeAdapterFactory(new LowercaseEnumTypeAdapterFactory())
-                .registerTypeAdapter(Prompt.class, new BasePrompt.PromptDeserializer())
-                .registerTypeAdapter(Double.class, new JsonSerializer<Double>() {
+                .registerTypeAdapter(Prompt.class, new BasePrompt.PromptDeserializer());
+                // todo: this function is very weird. It seems to cause stack overflow
+                /*.registerTypeAdapter(Double.class, new JsonSerializer<Double>() {
                     @Override public JsonElement serialize(Double src, Type typeOfSrc,
                             JsonSerializationContext context) {
                         if ((src == Math.floor(src)) && !Double.isInfinite(src)) {
                             return context.serialize(src.intValue());
                         }
 
-                        return context.serialize(src);
+                        return context.serialize(src.doubleValue());
                     }
-                });
+                });*/
+
         TriggerInit.injectDeserializers(gson);
         return gson.create();
     }
