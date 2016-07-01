@@ -29,7 +29,7 @@ import org.ohmage.provider.OhmageContract.Surveys;
 public class OhmageContractTest extends AndroidTestCase {
 
     public static final String fakeId = "fakeId";
-    public static final Long fakeVersion = new Long(1);
+    public static final String fakeVersion = "1";
 
     public static final Uri fakeOhmletUri =
             Ohmlets.CONTENT_URI.buildUpon().appendPath(fakeId).build();
@@ -111,11 +111,7 @@ public class OhmageContractTest extends AndroidTestCase {
         assertEquals(fakeStreamUri, uri);
     }
 
-    public void testStreamgetUriForStreamIdVersion_validId_returnsUri() {
-        Uri uri = Streams.getUriForStreamIdVersion(fakeId, fakeVersion);
 
-        assertEquals(fakeStreamVersionUri, uri);
-    }
 
     public void testStreamgetId_noId_returnsNull() {
         String id = Streams.getId(Streams.CONTENT_URI);

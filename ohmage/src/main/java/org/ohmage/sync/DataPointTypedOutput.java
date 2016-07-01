@@ -49,15 +49,17 @@ public class DataPointTypedOutput implements TypedOutput {
 
     }
 
-    public DataPointTypedOutput(JsonObject header, JsonObject location, JsonObject data, ResponseFiles files) {
+    public DataPointTypedOutput(JsonObject header, JsonObject location, JsonObject data_content, ResponseFiles files) {
 
 
-        data.add("sensed_location", location);
+        data_content.add("sensed_location", location);
 
         header.add("acquisition_provenance", acquisitionProvenance);
 
         JsonObject datapoint = new JsonObject();
         datapoint.add("header", header);
+        JsonObject data = new JsonObject();
+        data.add("data", data_content);
         datapoint.add("body", data);
 
         mMulitpartType = new MultipartTypedOutput();

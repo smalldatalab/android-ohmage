@@ -34,7 +34,7 @@ import org.ohmage.app.SurveyActivity.SurveyPromptLoader;
 import org.ohmage.auth.AuthHelper;
 import org.ohmage.auth.AuthenticateFragment;
 import org.ohmage.auth.Authenticator;
-import org.ohmage.auth.AuthenticatorTest;
+//import org.ohmage.auth.AuthenticatorTest;
 import org.ohmage.auth.CreateAccountFragment;
 import org.ohmage.auth.SignInFragment;
 import org.ohmage.auth.oauth.OAuthActivity;
@@ -68,7 +68,7 @@ import static org.mockito.Mockito.mock;
         injects = {
                 InjectedAndroidTestCase.class,
                 MainActivityTest.class,
-                AuthenticatorTest.class,
+                //AuthenticatorTest.class,
                 StreamSyncAdapterTest.class,
                 MainActivityOhmletsTest.class,
 
